@@ -8,7 +8,7 @@ link_args = ['-m64']
 # https://mesonbuild.com/Python-module.html
 # Note that pure=false is needed if we're including an extension module in the package.
 py3 = import('python').find_installation('python3', pure: false)
-# message('Debug: py3.path = ', py3.path())
+message('Debug: py3.path = ', py3.path())
 
 # Show sys.path for debugging
 # ret = run_command(py3.path(), '-c', 'import sys; print(sys.path)', check: true)
@@ -40,19 +40,20 @@ py3.install_sources(
     subdir: 'three_level'
 )
 
-# https://mesonbuild.com/Reference-manual_functions.html#both_libraries
-# https://mesonbuild.com/Reference-manual_returned_both_libs.html
-add_three_lib = both_libraries('add_three', 'src_lib/add_three.cpp', cpp_args: cpp_args, link_args: link_args)
+# https://mesonbuild.com/Reference-manual_functions.html#shared_library
+# https://mesonbuild.com/Reference-manual_returned_lib.html
 
-executable(
-    'test-add-three',
-    'src_bin/test-add-three.cpp',
+add_three_lib = shared_library(
+    'three_level',
+    ['src_lib/add_three.cpp'],
     cpp_args: cpp_args,
-    link_args: link_args,
-    link_with: add_three_lib.get_shared_lib()    # link add_three.so
+    install: true,
+    install_dir: py3.get_install_dir() / 'three_level'
 )
 
 # https://mesonbuild.com/Python-module.html#extension_module
+# https://mesonbuild.com/Reference-manual_functions.html#shared_module
+
 py3.extension_module(
      '_three_level_pyext',   # Note underscore (this will end up as three_level._three_level_pyext)
      sources: ['src_pyext/three_level_pyext.cpp'],
@@ -60,8 +61,18 @@ py3.extension_module(
      cpp_args: cpp_args,
      link_args: link_args,
      link_language : 'cpp',
-     link_with: add_three_lib.get_static_lib(),    # link add_three.a to _three_level_pyext.so
+     link_with: add_three_lib,  # link add_three.so to _three_level_pyext.so
      override_options: ['cpp_rtti=true'],
      subdir: 'three_level',
-     install: true
+     install: true,
+     # install_rpath: py3.get_install_dir() / 'three_level'    # doesn't seem to be necessary
+)
+
+
+executable(
+    'test-add-three',
+    'src_bin/test-add-three.cpp',
+    cpp_args: cpp_args,
+    link_args: link_args,
+    link_with: add_three_lib
 )
