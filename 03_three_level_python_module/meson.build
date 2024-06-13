@@ -45,7 +45,7 @@ py3.install_sources(
 
 add_three_lib = shared_library(
     'three_level',
-    ['src_lib/add_three.cpp'],
+    ['src_lib/three_level.cpp'],
     cpp_args: cpp_args,
     install: true,
     install_dir: py3.get_install_dir() / 'three_level'
