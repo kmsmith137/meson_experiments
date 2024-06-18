@@ -1,0 +1,19 @@
+# https://packaging.python.org/en/latest/specifications/pyproject-toml/
+[build-system]
+build-backend = 'mesonpy'
+requires = [ 'meson-python' ]
+
+# https://packaging.python.org/en/latest/specifications/pyproject-toml/#declaring-project-metadata-the-project-table
+[project]
+name = 'ctypes_example'
+version = '0.0.1'
+dependencies = [ 'numpy' ]
+# description = 'A toy example'
+# readme = 'README.md'
+# requires-python = '>=3.8'
+# license = {file = 'LICENSE.txt'}
+# authors = [ {name = 'Kendrick Smith', email = 'kmsmith@perimeterinstitute.ca'} ]
+
+# https://meson-python.readthedocs.io/en/latest/how-to-guides/meson-args.html
+[tool.meson-python.args]
+compile = ['--verbose']  # only takes effect if 'pip install' is invoked with '-v' flag
