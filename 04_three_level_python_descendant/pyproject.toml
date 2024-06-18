@@ -1,0 +1,23 @@
+# https://packaging.python.org/en/latest/specifications/pyproject-toml/
+# https://packaging.python.org/en/latest/specifications/dependency-specifiers/
+[build-system]
+build-backend = 'mesonpy'
+# FIXME horrible!! Can't use a relative pathname here
+# Client-side git-receive hooks might be a solution (https://stackoverflow.com/questions/75159453/specifying-local-relative-dependency-in-pyproject-toml)
+# requires = [ 'meson-python', 'pybind11', 'three_level @ file:///localhome/kmsmith/git/meson_experiments/03_three_level_python_module' ]
+requires = [ 'meson-python', 'pybind11' ]
+
+# https://packaging.python.org/en/latest/specifications/pyproject-toml/#declaring-project-metadata-the-project-table
+[project]
+name = 'three_level_descendant'
+version = '0.0.1'
+dependencies = [ 'pybind11' ] # 'three_level'?
+# description = 'A toy example'
+# readme = 'README.md'
+# requires-python = '>=3.8'
+# license = {file = 'LICENSE.txt'}
+# authors = [ {name = 'Kendrick Smith', email = 'kmsmith@perimeterinstitute.ca'} ]
+
+# https://meson-python.readthedocs.io/en/latest/how-to-guides/meson-args.html
+[tool.meson-python.args]
+compile = ['--verbose']  # only takes effect if 'pip install' is invoked with '-v' flag

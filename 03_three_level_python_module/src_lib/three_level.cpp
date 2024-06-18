@@ -9,11 +9,11 @@ int add_three(int n)
 // Linked into three_level_descendant/._three_level_descendent_pyext
 int add_four(int n)
 {
-    return n+3;
+    return n+4;
 }
 
 // Linked into three_level_descendant/libthree_level_descendant.so
 int add_five(int n)
 {
-    return n+3;
+    return n+5;
 }

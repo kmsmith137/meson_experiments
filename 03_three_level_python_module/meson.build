@@ -1,5 +1,8 @@
+# project(): https://mesonbuild.com/Reference-manual_functions.html#project
+# python.install_env: https://mesonbuild.com/Builtin-options.html#python-module
+
 project('three_level', 'cpp',
-        default_options: ['optimization=3','debug=false','cpp_std=c++17'])
+        default_options: ['python.install_env=auto','optimization=3','debug=false','cpp_std=c++17'])
 
 # Not sure if this is really necessary
 cpp_args = ['-m64']
@@ -8,7 +11,8 @@ link_args = ['-m64']
 # https://mesonbuild.com/Python-module.html
 # Note that pure=false is needed if we're including an extension module in the package.
 py3 = import('python').find_installation('python3', pure: false)
-message('Debug: py3.path = ', py3.path())
+message('py3.path = ', py3.path())
+message('py3.install_dir = ', py3.get_install_dir())
 
 # Show sys.path for debugging
 # ret = run_command(py3.path(), '-c', 'import sys; print(sys.path)', check: true)
@@ -40,10 +44,14 @@ py3.install_sources(
     subdir: 'three_level'
 )
 
+# FIXME I wanted to put the library in 'three_level/lib', but extension_module(..., install_rpath:)
+# didn't seem to work. (The extension module always seems to include its containing directory in its
+# rpath, but no other directories.)
+#
 # https://mesonbuild.com/Reference-manual_functions.html#shared_library
 # https://mesonbuild.com/Reference-manual_returned_lib.html
 
-add_three_lib = shared_library(
+three_level_lib = shared_library(
     'three_level',
     ['src_lib/three_level.cpp'],
     cpp_args: cpp_args,
@@ -61,11 +69,20 @@ py3.extension_module(
      cpp_args: cpp_args,
      link_args: link_args,
      link_language : 'cpp',
-     link_with: add_three_lib,  # link add_three.so to _three_level_pyext.so
+     link_with: three_level_lib,  # link three_level.so to _three_level_pyext.so
      override_options: ['cpp_rtti=true'],
      subdir: 'three_level',
      install: true,
-     # install_rpath: py3.get_install_dir() / 'three_level'    # doesn't seem to be necessary
+     # install_rpath: py3.get_install_dir() / 'three_level/lib'    # doesn't seem to work
+)
+
+
+# Note: to install headers, use py3.install_sources(), not install_headers(...  py3.get_install_dir() ...)
+# Note: need one call to install_sources() for each directory/subdirectory containing headers
+
+py3.install_sources(
+    'include/three_level.hpp',
+    subdir: 'three_level/include'
 )
 
 
@@ -74,5 +91,5 @@ executable(
     'src_bin/test-add-three.cpp',
     cpp_args: cpp_args,
     link_args: link_args,
-    link_with: add_three_lib
+    link_with: three_level_lib
 )
