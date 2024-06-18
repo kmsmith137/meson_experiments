@@ -6,5 +6,4 @@
 
 import three_level
 
-from ._three_level_descendant_pyext import *
-
+from .three_level_descendant_pybind11 import *

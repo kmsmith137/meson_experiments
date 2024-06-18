@@ -63,13 +63,13 @@ three_level_lib = shared_library(
 # https://mesonbuild.com/Reference-manual_functions.html#shared_module
 
 py3.extension_module(
-     '_three_level_pyext',   # Note underscore (this will end up as three_level._three_level_pyext)
-     sources: ['src_pyext/three_level_pyext.cpp'],
+     'three_level_pybind11',
+     sources: ['src_lib/three_level_pybind11.cpp'],
      dependencies : [pybind11_dep],
      cpp_args: cpp_args,
      link_args: link_args,
      link_language : 'cpp',
-     link_with: three_level_lib,  # link three_level.so to _three_level_pyext.so
+     link_with: three_level_lib,  # link three_level.so to three_level_pybind11.so
      override_options: ['cpp_rtti=true'],
      subdir: 'three_level',
      install: true,
