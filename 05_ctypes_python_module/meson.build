@@ -1,5 +1,8 @@
-project('ctypes_example', 'cpp',
-        default_options: ['optimization=3','debug=false','cpp_std=c++17'])
+project(
+    'ctypes_example',
+    'cpp',
+    default_options: ['optimization=3','debug=false','cpp_std=c++17']
+)
 
 # Not sure if this is really necessary
 cpp_args = ['-m64']

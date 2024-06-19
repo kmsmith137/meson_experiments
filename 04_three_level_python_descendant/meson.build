@@ -1,8 +1,11 @@
 # project(): https://mesonbuild.com/Reference-manual_functions.html#project
 # python.install_env: https://mesonbuild.com/Builtin-options.html#python-module
 
-project('three_level_descendant', 'cpp',
-        default_options: ['python.install_env=auto','optimization=3','debug=false','cpp_std=c++17'])
+project(
+    'three_level_descendant',
+    'cpp',
+     default_options: ['python.install_env=auto','optimization=3','debug=false','cpp_std=c++17']
+)
 
 # https://mesonbuild.com/Fs-module.html
 fs = import('fs')
