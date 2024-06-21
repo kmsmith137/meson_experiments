@@ -58,6 +58,7 @@ three_level_lib = shared_library(
     'three_level',
     ['src_lib/three_level.cpp'],
     cpp_args: cpp_args,
+    link_args: link_args,
     install: true,
     install_dir: py3.get_install_dir() / 'three_level'
 )

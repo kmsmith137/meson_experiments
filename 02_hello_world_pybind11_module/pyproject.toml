@@ -16,4 +16,6 @@ dependencies = [ 'pybind11' ]
 
 # https://meson-python.readthedocs.io/en/latest/how-to-guides/meson-args.html
 [tool.meson-python.args]
-compile = ['--verbose']  # only takes effect if 'pip install' is invoked with '-v' flag
+setup = ['-Db_ndebug=false']  # don't compile with -DNDEBUG (which disables asserts)
+compile = ['--verbose']       # only takes effect if 'pip install' is invoked with '-v' flag
+
